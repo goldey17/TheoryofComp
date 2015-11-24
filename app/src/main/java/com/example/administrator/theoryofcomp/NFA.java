@@ -5,14 +5,14 @@ import java.util.ArrayList;
 /**
  * Created by goldey17 on 11/24/2015.
  */
-public class DFA {
+public class NFA {
     private ArrayList<String> states;
     private ArrayList<String> alphabet;
     private ArrayList<String> transitions;
     private String startState;
     private ArrayList<String> acceptingStates;
 
-    public DFA (ArrayList<String> newStates, ArrayList<String> newAlphabet, ArrayList<String> newTransitions,
+    public NFA (ArrayList<String> newStates, ArrayList<String> newAlphabet, ArrayList<String> newTransitions,
                 String newStartState, ArrayList<String> newAcceptingStates){
         states = newStates;
         alphabet = newAlphabet;
@@ -21,7 +21,7 @@ public class DFA {
         acceptingStates = newAcceptingStates;
     }
 
-    public REGEX toRegex(){
+    public DFA toDFA(){
         return null;
     }
 
@@ -65,3 +65,4 @@ public class DFA {
         acceptingStates = value;
     }
 }
+
