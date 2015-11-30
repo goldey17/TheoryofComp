@@ -21,8 +21,37 @@ public class DFA {
         acceptingStates = newAcceptingStates;
     }
 
-    public REGEX toRegex(){
-        return null;
+    public String toRegex(){
+        //Add new start state and epsilon transition to old start state
+        states.add("q'");
+        transitions.add("(q'," + startState + ",e");
+
+        //Add new accept state and epsilon transition from old accept states
+        states.add("f'");
+        for(int i = 0; i < acceptingStates.size(); i++){
+            transitions.add("(" + acceptingStates.get(i) + ",f',e)");
+        }
+
+        //Rip out a state
+        for(int i = 0; i < (states.size() - 2); i++){ //For each state except the two added
+            for(int j = 0; j < transitions.size(); j ++){ //For each transition
+                String string = transitions.get(j); //Get first transition
+                if(string.contains(states.get(i))){ //if transition has the state
+                    if(string.substring(string.indexOf("(") + 1).equals(states.get(i))){ //if the state is the start state
+
+                    }
+                    if(string.substring(string.indexOf(",") + 1).equals(states.get(i))){ //if the state is the end state
+
+                    }
+                    if((string.substring(string.indexOf("(") + 1).equals(states.get(i)) && //if the state is the start and end state
+                            (string.substring(string.indexOf(",") + 1).equals(states.get(i))))){
+
+                    }
+                }
+            }
+        }
+
+        return "test";
     }
 
     public ArrayList<String> getStates(){
