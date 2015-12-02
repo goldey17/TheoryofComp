@@ -3,26 +3,60 @@ package com.example.administrator.theoryofcomp;
 import java.util.ArrayList;
 
 /**
- * Created by goldey17 on 11/24/2015.
+ * Created by Jess Mann
  */
 public class NFA {
+    //Instance Variables
     private ArrayList<String> states;
     private ArrayList<String> alphabet;
-    private ArrayList<String> transitions;
+    private ArrayList<Transition> transitions;
     private String startState;
     private ArrayList<String> acceptingStates;
 
-    public NFA (ArrayList<String> newStates, ArrayList<String> newAlphabet, ArrayList<String> newTransitions,
+    //Constructor
+    public NFA (ArrayList<String> newStates, ArrayList<String> newAlphabet, ArrayList<Transition> newTransitions,
                 String newStartState, ArrayList<String> newAcceptingStates){
-        states = newStates;
-        alphabet = newAlphabet;
-        transitions = newTransitions;
-        startState = newStartState;
-        acceptingStates = newAcceptingStates;
+        if (newStates != null)
+            states = newStates;
+        else {
+            states = new ArrayList<>();
+            states.add("");
+        }
+
+        if (newAlphabet != null)
+            alphabet = newAlphabet;
+        else {
+            alphabet = new ArrayList<>();
+            alphabet.add("");
+        }
+
+        if (newTransitions != null)
+            transitions = newTransitions;
+        else {
+            transitions = new ArrayList<>();
+            transitions.add(new Transition("","",""));
+        }
+
+        if (newStartState != null)
+            startState = newStartState;
+        else
+            startState = "";
+
+        if (newAcceptingStates != null)
+            acceptingStates = newAcceptingStates;
+        else {
+            acceptingStates = new ArrayList<>();
+            acceptingStates.add("");
+        }
     }
 
-    public DFA toDFA(){
-        return null;
+    //Default Constructor
+    public NFA (){
+        states = new ArrayList<>();
+        alphabet = new ArrayList<>();
+        transitions = new ArrayList<>();
+        startState = null;
+        acceptingStates = new ArrayList<>();
     }
 
     public ArrayList<String> getStates(){
@@ -33,7 +67,7 @@ public class NFA {
         return alphabet;
     }
 
-    public ArrayList<String> getTransitions(){
+    public ArrayList<Transition> getTransitions(){
         return transitions;
     }
 
@@ -45,24 +79,41 @@ public class NFA {
         return acceptingStates;
     }
 
-    public void setStates(ArrayList<String> value){
-        states = value;
-    }
-
     public void setAlphabet(ArrayList<String> value){
         alphabet = value;
-    }
-
-    public void setTransitions(ArrayList<String> value){
-        transitions = value;
     }
 
     public void setStartState(String value){
         startState = value;
     }
 
-    public void setAcceptingStates(ArrayList<String> value){
-        acceptingStates = value;
+    public void addAlphabet(String newAlphabet) {
+        if(!alphabet.contains(newAlphabet)){
+            alphabet.add(newAlphabet);
+        }
+    }
+
+    public void addState(String state){
+        states.add(state);
+    }
+
+    //Returns the highest state number
+    public String getLastTransistion(){
+        int biggestInt = 0;
+        for(String s : states){
+            if(Integer.parseInt(s.substring(1)) > biggestInt){
+                biggestInt = Integer.parseInt(s.substring(1));
+            }
+        }
+        return "q" + biggestInt;
+    }
+
+    public void addTransistion(Transition newTransistion){
+       transitions.add(newTransistion);
+    }
+
+    public void addAcceptState(String newAcceptState){
+        acceptingStates.add(newAcceptState);
     }
 }
 

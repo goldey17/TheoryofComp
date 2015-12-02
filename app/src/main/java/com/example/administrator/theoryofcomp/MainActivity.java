@@ -7,9 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -22,6 +20,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     //Result for DFA
     TextView dfa_regex_expression;
+
+    //Test Cases for DFA
+    Button dfa_test_case_1;
+    Button dfa_test_case_2;
+    Button dfa_test_case_3;
+    Button dfa_test_case_4;
 
     //Layouts
     LinearLayout dfa_layout;
@@ -38,11 +42,17 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     TextView regex_nfa_start_state;
     TextView regex_nfa_accept_states;
 
+    //Test Cases for DFA
+    Button regex_test_case_1;
+    Button regex_test_case_2;
+    Button regex_test_case_3;
+    Button regex_test_case_4;
 
     //Submit buttons
     Button dfa_submit;
     Button regex_submit;
 
+    //Intilizes everything,sets on click listeners, creates layout
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -57,6 +67,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         dfa_submit = (Button)findViewById(R.id.dfa_submit);
         dfa_submit.setOnClickListener(this);
 
+        dfa_test_case_1 = (Button)findViewById(R.id.testcase1);
+        dfa_test_case_2 = (Button)findViewById(R.id.testcase2);
+        dfa_test_case_3 = (Button)findViewById(R.id.testcase3);
+        dfa_test_case_4 = (Button)findViewById(R.id.testcase4);
+
+        dfa_test_case_1.setOnClickListener(this);
+        dfa_test_case_2.setOnClickListener(this);
+        dfa_test_case_3.setOnClickListener(this);
+        dfa_test_case_4.setOnClickListener(this);
+
         nfa_layout = (LinearLayout)findViewById(R.id.nfa);
         nfa_layout.setVisibility(View.GONE);
 
@@ -69,9 +89,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         regex_layout = (LinearLayout)findViewById(R.id.regex);
         regex_submit = (Button)findViewById(R.id.regex_submit);
         regex_submit.setOnClickListener(this);
+
+        regex_test_case_1 = (Button)findViewById(R.id.regex_1);
+        regex_test_case_2 = (Button)findViewById(R.id.regex_2);
+        regex_test_case_3 = (Button)findViewById(R.id.regex_3);
+        regex_test_case_4 = (Button)findViewById(R.id.regex_4);
+
+        regex_test_case_1.setOnClickListener(this);
+        regex_test_case_2.setOnClickListener(this);
+        regex_test_case_3.setOnClickListener(this);
+        regex_test_case_4.setOnClickListener(this);
     }
 
     @Override
+    //Handles button clicking and buttons for test cases
     public void onClick(View view) {
         if(view == dfa_submit){
             //Get states and put them into an arraylist
@@ -98,10 +129,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             //Get transitions and put into an arraylist
             String transitions = dfa_input_transitions.getText().toString().trim().toLowerCase();
-            ArrayList<String> arrayListOfTransitions = new ArrayList<>();
+            ArrayList<Transition> arrayListOfTransitions = new ArrayList<>();
             while (transitions.indexOf(")") != -1){
                 String subString = transitions.substring(0,transitions.indexOf(")") + 1);
-                arrayListOfTransitions.add(subString.trim());
+                Transition trans = new Transition(subString);
+                arrayListOfTransitions.add(trans);
                 transitions = transitions.substring(transitions.indexOf(")") + 1).trim();
             }
 
@@ -127,7 +159,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         }else if(view == regex_submit){
             //Get input and create a regex object
-            String regex_input = regex_input_expression.getText().toString().trim();
+            String regex_input = regex_input_expression.getText().toString().trim().toLowerCase();
             REGEX regex = new REGEX(regex_input);
 
             //Transform the regex into a nfa
@@ -142,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             //The data from the nfa
             ArrayList<String> states = nfa.getStates();
             ArrayList<String> alphabet = nfa.getAlphabet();
-            ArrayList<String> transitions = nfa.getTransitions();
+            ArrayList<Transition> transitions = nfa.getTransitions();
             String startState = nfa.getStartState();
             ArrayList<String> acceptStates = nfa.getAcceptingStates();
 
@@ -156,7 +188,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
 
             for(int i = 0; i < transitions.size(); i++){
-                nfa_transitions = nfa_transitions + " " + transitions.get(i);
+                nfa_transitions = nfa_transitions + transitions.get(i).displayTransistion();
             }
 
             for(int i = 0; i < acceptStates.size(); i++){
@@ -169,6 +201,38 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             regex_nfa_transitions.setText(nfa_transitions);
             regex_nfa_start_state.setText(startState);
             regex_nfa_accept_states.setText(nfa_accept_states);
+        }else if(view == dfa_test_case_1){
+            dfa_input_states.setText("q0,q1,q2");
+            dfa_input_aphabet.setText("0,1");
+            dfa_input_transitions.setText("(q0,q1,0)(q0,q2,1)(q1,q0,0)(q1,q2,1)(q2,q0,1)(q2,q1,0)");
+            dfa_input_start_state.setText("q0");
+            dfa_input_accept_states.setText("q1,q2");
+        }else if(view == dfa_test_case_2){
+            dfa_input_states.setText("q0,q1,q2");
+            dfa_input_aphabet.setText("a,b");
+            dfa_input_transitions.setText("(q0,q1,b)(q0,q0,a)(q1,q1,a)(q1,q2,b)(q2,q2,a)(q2,q2,b)");
+            dfa_input_start_state.setText("q0");
+            dfa_input_accept_states.setText("q1");
+        }else if(view == dfa_test_case_3){
+            dfa_input_states.setText("s,t");
+            dfa_input_aphabet.setText("a,b");
+            dfa_input_transitions.setText("(s,t,a)(s,s,b)(t,t,b)(t,s,a)");
+            dfa_input_start_state.setText("s");
+            dfa_input_accept_states.setText("s");
+        }else if(view == dfa_test_case_4){
+            dfa_input_states.setText("q2,q3,q1");
+            dfa_input_aphabet.setText("a,b");
+            dfa_input_transitions.setText("(q1,q2,a)(q1,q2,b)(q2,q2,a)(q2,q3,b)(q3,q1,b)(q3,q2,a)");
+            dfa_input_start_state.setText("q1");
+            dfa_input_accept_states.setText("q1,q3");
+        }else if(view == regex_test_case_1){
+            regex_input_expression.setText("((aub).(a)*.(b)*)");
+        }else if(view == regex_test_case_2){
+            regex_input_expression.setText("(a.b.c.d.e.f.g)");
+        }else if(view == regex_test_case_3){
+            regex_input_expression.setText("((b)*.(a)*.(a)*)");
+        }else if(view == regex_test_case_4){
+            regex_input_expression.setText("((a.d.b)ud)");
         }
     }
 }
